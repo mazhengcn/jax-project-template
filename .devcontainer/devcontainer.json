@@ -1,0 +1,43 @@
+{
+    "name": "Project Name",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installZsh": false,
+            "username": "none"
+        }
+    },
+    "runArgs": [
+        "--gpus=all",
+        "--shm-size=1g"
+    ],
+    "mounts": [
+        {
+            "source": "project_name_data",
+            "target": "${containerWorkspaceFolder}/data",
+            "type": "volume"
+        }
+    ],
+    "remoteEnv": {
+        "TZ": "Asia/Shanghai"
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.defaultInterpreterPath": "/opt/venv/bin/python"
+            },
+            "extensions": [
+                "ms-python.black-formatter",
+                "ms-python.flake8",
+                "ms-python.isort",
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-toolsai.jupyter",
+                "GitHub.copilot"
+            ]
+        }
+    },
+    "postCreateCommand": "pip install -e ."
+}

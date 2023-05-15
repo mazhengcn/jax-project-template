@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "project_name"
+version = "1.0.0"
+description = "Source code for project..."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ email = "Author Email" }, { name = "Author names" }]
+license = { text = "Apache License, Version 2.0" }
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "absl-py",
+    "dill",
+    "dm-haiku",
+    "jax>=0.4.3",
+    "jaxline",
+    "ml-collections",
+    "numpy",
+    "optax",
+    "tensorflow-cpu",
+    "tensorflow-datasets"
+]
+
+[project.urls]
+homepage = "project_url"
+
+[tool.setuptools]
+packages = ["project_name"]
+
+[tool.isort]
+profile = "black"
+
+[tool.flake8]
+extend-ignore = ["E203"]
+
+[tool.black]
+line-length = 79
