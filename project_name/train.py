@@ -5,7 +5,7 @@ import pathlib
 import signal
 import threading
 import time
-from collections.abc import Generator, Mapping
+from collections.abc import Mapping
 
 import dill
 import haiku as hk
@@ -18,7 +18,6 @@ from jaxline import experiment, platform
 from jaxline import utils as jl_utils
 
 from . import optimizers, utils
-from .data.pipeline import FeatureDict
 from .model import modules
 from .model.tf import input_pipeline
 from .utils import hk_to_flat_dict
@@ -70,9 +69,11 @@ class Trainer(experiment.AbstractExperiment):
         self._opt_state = None
 
         # Initialize model functions
+        self._model_class = getattr(modules, self.config.model.name)
+
         def _forward_fn(*args, **kwargs):
-            model = modules.DeepRTE(self.config.model)
-            return model(*args, **kwargs)
+            model_fn = self._model_class(self.config.model)
+            return model_fn(*args, **kwargs)
 
         self.model = hk.transform_with_state(_forward_fn)
 
@@ -166,7 +167,7 @@ class Trainer(experiment.AbstractExperiment):
             "scalars": scalars,
         }
 
-    def _build_train_input(self) -> Generator[FeatureDict, None, None]:
+    def _build_train_input(self):
         """Build train input as generator/iterator."""
         c = self.config
         global_batch_size = c.training.batch_size
@@ -357,7 +358,7 @@ class Trainer(experiment.AbstractExperiment):
         # Set evaluating state to True after initialization.
         self._evaluating = True
 
-    def _build_eval_input(self) -> Generator[FeatureDict, None, None]:
+    def _build_eval_input(self):
         c = self.config
         global_batch_size = c.evaluation.batch_size
         per_device_batch_size, ragged = divmod(
