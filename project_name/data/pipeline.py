@@ -1,9 +1,10 @@
-from collections.abc import Mapping, MutableMapping
+from collections.abc import Mapping
 from typing import Optional
 
 import numpy as np
 
-FeatureDict = MutableMapping[str, np.ndarray]
+RawFeatureDict = Mapping[str, Mapping[str, np.ndarray]]
+FeatureDict = Mapping[str, np.ndarray]
 
 
 def make_data_features(np_data: Mapping[str, np.ndarray]) -> FeatureDict:
@@ -27,7 +28,7 @@ class DataPipeline:
     def load_data(self):
         pass
 
-    def process(self, normalization: Optional[bool] = False) -> FeatureDict:
+    def process(self, normalization: Optional[bool] = False) -> RawFeatureDict:
         data_feature = make_data_features(self.data)
         grid_feature = make_grid_features(self.data)
         shape_dict = make_shape_dict(self.data)
