@@ -23,7 +23,7 @@ if [ -n "${CUDA_DEVICES}" ]; then
     export CUDA_VISIBLE_DEVICES="${CUDA_DEVICES}"
 fi
 
-python run_deeprte.py \
+python run_project.py \
     --output_dir="results" \
     --data_dir="${DATA_DIR}" \
     --data_filenames="${DATA_FILENAMES}" \
