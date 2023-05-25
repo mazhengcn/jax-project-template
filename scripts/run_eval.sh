@@ -28,8 +28,8 @@ else
 fi
 
 python project_name/train.py \
-	--config=deeprte/config.py \
-	--config.experiment_kwargs.config.dataset.name=rte/${DATASET_NAME} \
+	--config=project_name/config.py \
+	--config.experiment_kwargs.config.dataset.name=project_name/${DATASET_NAME} \
 	--config.experiment_kwargs.config.evaluation.batch_size=${BATCH_SIZE} \
 	--config.checkpoint_dir="${EVAL_CKPT_DIR}" \
 	--config.restore_dir="${RESTORE_DIR}" \
