@@ -40,7 +40,7 @@ class ProjectName(hk.Module):
 
         batched_inputs = {k: batch[k] for k in FEATURES}
         predictions = batched_project_op(batched_inputs)
-        ret.update({"predicted": predictions})
+        ret.update({"predictions": predictions})
 
         if compute_loss:
             labels = batch["labels"]
