@@ -5,7 +5,7 @@ import pathlib
 import signal
 import threading
 import time
-from collections.abc import Mapping
+from collections.abc import Generator, Mapping
 
 import dill
 import haiku as hk
@@ -17,15 +17,15 @@ from absl import app, flags, logging
 from jaxline import experiment, platform
 from jaxline import utils as jl_utils
 
-from . import optimizers, utils
+from . import input_pipeline, optimizers, utils
 from .model import modules
-from .model.tf import input_pipeline
 from .utils import hk_to_flat_dict
 
 FLAGS = flags.FLAGS
 
 OptState = tuple[optax.TraceState, optax.ScaleByScheduleState, optax.ScaleState]
 Scalars = Mapping[str, jax.Array]
+FeatureDict = Mapping[str, np.ndarray]
 
 
 def _format_logs(prefix, results):
@@ -181,14 +181,14 @@ class Trainer(experiment.AbstractExperiment):
                 f"number of devices {jax.local_device_count()}"
             )
         return input_pipeline.load(
+            name=c.dataset.name,
             split=input_pipeline.Split.TRAIN,
             split_percentage=c.dataset.split_percentage,
+            tfds_dir=c.dataset.tfds_dir,
             is_training=True,
             batch_sizes=[jax.local_device_count(), per_device_batch_size],
             collocation_sizes=c.training.collocation_sizes,
             batch_repeat=c.training.batch_repeat,
-            data_dir=c.dataset.data_dir,
-            name=c.dataset.name,
         )
 
     def _initialize_training(self):
@@ -358,7 +358,7 @@ class Trainer(experiment.AbstractExperiment):
         # Set evaluating state to True after initialization.
         self._evaluating = True
 
-    def _build_eval_input(self):
+    def _build_eval_input(self) -> Generator[FeatureDict, None, None]:
         c = self.config
         global_batch_size = c.evaluation.batch_size
         per_device_batch_size, ragged = divmod(
@@ -371,12 +371,11 @@ class Trainer(experiment.AbstractExperiment):
                 f"number of devices {jax.local_device_count()}"
             )
         return input_pipeline.load(
+            name=c.dataset.name,
             split=input_pipeline.Split.VALID,
             split_percentage=c.dataset.split_percentage,
-            is_training=False,
+            tfds_dir=c.dataset.tfds_dir,
             batch_sizes=[jax.local_device_count(), per_device_batch_size],
-            data_dir=c.dataset.data_dir,
-            name=c.dataset.name,
         )
 
 
