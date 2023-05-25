@@ -11,7 +11,7 @@ def get_config():
     num_epochs = 5000
 
     dataset_config = ml_collections.ConfigDict(
-        dict(name="rte", data_dir="data/tfds", split_percentage="80%")
+        dict(name="project_name", data_dir="data/tfds", split_percentage="80%")
     )
 
     dataset_builder = tfds.builder(

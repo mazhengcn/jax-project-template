@@ -1,5 +1,6 @@
 # Project related files
-data/
+# data/*
+/data/
 ckpts/
 results/
 notebooks/
