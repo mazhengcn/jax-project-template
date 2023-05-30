@@ -39,6 +39,3 @@ homepage = "project_url"
 
 [tool.setuptools]
 packages = ["project_name"]
-
-[tool.isort]
-profile = "black"
